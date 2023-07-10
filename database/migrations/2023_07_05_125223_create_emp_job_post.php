@@ -17,8 +17,9 @@ class CreateEmpJobPost extends Migration
             $table->id();
             $table->unsignedBigInteger('emp_id');
             $table->foreign('emp_id')->references('id')->on('employers')->onDelete('cascade');
+            $table->unsignedBigInteger('location_id')->nullable();
+            $table->foreign('location_id')->references('id')->on('india_city')->onDelete('cascade');
             $table->string('job_title');
-            $table->string('job_location');
             $table->string('url_location')->nullable();
             $table->decimal('min_salary', 7, 2);
             $table->decimal('max_salary', 8, 2);
