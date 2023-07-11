@@ -17,6 +17,17 @@
             <div class="mb-3">
                 <label for="">phone</label>
                 <input type="text" name="phone" id="phone" class="form-control">
+                
+            </div>
+            <div class="mb-3">
+                <label for="">city</label>
+                <select class="form-select" name="city" id="city">
+                    <option value="">select city</option>
+                    @foreach ($city as $item)
+                        <option value="{{$item->id}}">{{$item->name}}</option>
+                    @endforeach
+                </select>
+               
             </div>
             <div class="mb-3">
                 <label for="">Password</label>

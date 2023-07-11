@@ -9,17 +9,23 @@ class UserFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
+     *            $table->unsignedBigInteger('location_id');
+
      * @return array
      */
     public function definition()
     {
         return [
+            'location_id'=>rand(1,600),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'phone'=>$this->faker->phoneNumber,
+            'gender'=>$this->faker->randomElement(['male', 'female','other']),
+            'users_type'=>$this->faker->randomElement(['fresher', 'experinced']),
+
         ];
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\jobPortal\front\employer;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -11,12 +12,15 @@ class Employer extends Controller
 {
     public function dashboard()
     {
+        // $users = DB::table('users')
+        //         ->join('education')
         return view('job_portal.front.employer.dashboard');
     }
     public function jobPost()
     {
-
-        return view('job_portal.front.employer.job_post');
+        
+        $city = DB::table('india_city')->get();
+        return view('job_portal.front.employer.job_post',compact(['city']));
     }
 
     public function jobPostStore(Request $request)
@@ -33,7 +37,7 @@ class Employer extends Controller
             [
                 'job_title' => 'required',
                 'vacancy' => "required",
-                'location' => 'required',
+                'city' => 'required',
                 'min_salary' => 'required|numeric',
                 'max_salary' => $request->min_salary > $request->max_salary ? 'required|numeric' : "",
                 "skill"    => "required|array",
@@ -58,7 +62,7 @@ class Employer extends Controller
         $get_data = [
             'emp_id' => auth('employer')->user()->id,
             'job_title' => $request->job_title,
-            'job_location' => $request->location,
+            'location_id' => $request->city,
             // 'url_location	' => $request->job_title,
             'min_salary' => $request->min_salary,
             'max_salary' => $request->max_salary,

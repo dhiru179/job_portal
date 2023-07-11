@@ -25,8 +25,6 @@ class CreateUsersTable extends Migration
             $table->string('phone',15)->nullable();
             $table->enum('gender', ['male', 'female','other'])->nullable();
             $table->enum('users_type', ['fresher', 'experinced'])->nullable();
-            $table->tinyInteger('experinced_in_years')->nullable();
-            $table->tinyInteger('experinced_in_months')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

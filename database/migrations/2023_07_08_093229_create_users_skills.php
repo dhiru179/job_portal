@@ -15,8 +15,8 @@ class CreateUsersSkills extends Migration
     {
         Schema::create('users_skills', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_resume_id');
+            $table->foreign('user_resume_id')->references('id')->on('users_resume')->onDelete('cascade');
             $table->string('skills',100);
             $table->timestamps();
         });

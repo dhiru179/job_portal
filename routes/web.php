@@ -16,7 +16,15 @@ use App\Http\Controllers\jobPortal\front\user\{
 use App\Http\Controllers\jobPortal\front\employer\{
     Employer,
 };
+use App\Http\Controllers\jobPortal\front\employer\auth\{
 
+    EmployerAuth,
+};
+
+use App\Http\Controllers\jobPortal\front\user\auth\{
+
+    UsersAuth
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -68,13 +76,15 @@ Route::middleware(['auth:employer'])->name('employers.')->prefix('employers')->g
 });
 
 Route::middleware(['auth'])->name('users.')->prefix('users')->group(function () {
-    
+    Route::get('/show-profile', [UsersAuth::class, 'showProfile'])->name('create-profile');
+    Route::post('/create-profile', [UsersAuth::class, 'updateProfile'])->name('create-profile.post');
+
+
     Route::get('/index', [FrontUser::class, 'index'])->name('index');
     Route::post('/apply-job', [FrontUser::class, 'applyJob'])->name('apply-job');
     Route::get('/list-job-applied', [FrontUser::class, 'listApplyJob'])->name('list-apply-job');
-    Route::get('/create-profile', [FrontUser::class, 'createProfile'])->name('create-profile');
-    Route::post('/create-profile', [FrontUser::class, 'createProfileSave'])->name('create-profile.post');
     Route::get('/create-resume', [FrontUser::class, 'createResume'])->name('create-resume');
+    Route::post('/create-resume', [FrontUser::class, 'createResumeStore'])->name('create-resume-post');
     Route::get('/upload-resume', [FrontUser::class, 'uploadResume'])->name('upload-resume');
 
 });
