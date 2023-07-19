@@ -12,7 +12,7 @@
                     <input type="submit" class="btn btn-success" value="Seacrh">
                 </div>
                 <div class="d-flex mb-3">
-                    <div class="mb-3 col-4">
+                    <div class="mb-3 col-4 ">
                         <select class="form-select" name="" id="">
                             <option value="">Search by Company</option>
                             @foreach ($employers as $item)
@@ -32,8 +32,8 @@
 
         </div>
         <div class="d-flex">
-            <div class="col-3">
-                <form id="filter" action="{{ route('landing_page') }}" method="GET">
+            <div class="col-3 me-3">
+                <form class="card p-3" id="filter" action="{{ route('landing_page') }}" method="GET">
                 <div class="">
                     <h5>Company</h5>
                     <div>

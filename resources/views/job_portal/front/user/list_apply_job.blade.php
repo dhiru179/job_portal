@@ -23,7 +23,7 @@
                         <td>{{ $item->job_title }}</td>
                         {{-- <td>{{ $item->skill }}</td> --}}
                         <td>Active</td>
-                        <td>{{ $item->job_staus }}</td>
+                        <td>{{ $item->job_status }}</td>
                         <td>
 
                         </td>

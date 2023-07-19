@@ -15,8 +15,13 @@
                     <input type="text" id="vacancy" name="vacancy" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="">Job Location</label>
-                    <input type="text" id="location" name="location" class="form-control">
+                    <label for="">Location</label>
+                    <select class="form-select" name="city" id="city">
+                        <option value="">select city</option>
+                        @foreach ($city as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 {{-- <div class="mb-3">
                     <label for="">Link Google Map</label>
@@ -103,13 +108,15 @@
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="experience" id="fresher"
-                                    value="0" onchange="this.checked==true ? ($('#manual_exp').addClass('d-none'),$('#manual_exp').attr('disabled',true)):''">
+                                    value="0"
+                                    onchange="this.checked==true ? ($('#manual_exp').addClass('d-none'),$('#manual_exp').attr('disabled',true)):''">
                                 <label class="form-check-label" for="fresher">Fresher</label>
                             </div>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="experience" id="exp_1"
-                                    value="1" onchange="this.checked==true ? ($('#manual_exp').addClass('d-none'),$('#manual_exp').attr('disabled',true)):''">
+                                    value="1"
+                                    onchange="this.checked==true ? ($('#manual_exp').addClass('d-none'),$('#manual_exp').attr('disabled',true)):''">
                                 <label class="form-check-label" for="exp_1">1+</label>
                             </div>
                             <div class="form-check form-check-inline">

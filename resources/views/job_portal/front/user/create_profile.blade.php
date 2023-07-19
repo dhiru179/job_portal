@@ -5,7 +5,6 @@
     <div class="container">
         <form class="mt-5 col-6 offset-3" action="" id="form">
             <h3 class="text-center">Create Profile</h3>
-            <input type="hidden" name="user_id" value={{ $user->id }}>
             <div class="mb-3">
                 <label for="">User Name</label>
                 <input type="text" name="user" id="user" value="{{ $user->name }}" class="form-control">
@@ -39,14 +38,22 @@
                 </div>
 
             </div>
+          
             <div class="mb-3">
-                <label for="">Date Of Birth</label>
-                <input type="date" name="dob" id="dob" value="{{ $user->date_of_birth }}" class="form-control">
+                <label for="">city</label>
+                <select class="form-select" name="city" id="city">
+                    <option value="">select city</option>
+                    @foreach ($city as $item)
+                        @if($user->location_id==$item->id)
+                        <option selected value="{{ $item->id }}">{{ $item->name }}</option>
+                        @else
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endif
+                    @endforeach
+                </select>
+
             </div>
-            <div class="mb-3">
-                <label for="">Address</label>
-                <textarea name="address" id="address" class="form-control">{{ $user->address }}</textarea>
-            </div>
+        
             <div class="mb-3">
                 <input type="file" name="img" id="img" class="form-control">
             </div>
@@ -55,6 +62,25 @@
                 <input type="button" class="btn btn-success" id="submit" value="submit">
             </div>
         </form>
+        {{-- <div class="">
+            <div class="card d-flex mt-3">
+                <div>
+
+                    <img src="..." class="card-img-top" alt="...">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">{{ $user->name }}</h5>
+                  <p class="card-text">{{ $user->email }}</p>
+                  <p class="card-text">{{ $user->phone }}</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+            <div class="d-flex">
+                <div class="card">
+
+                </div>
+            </div>
+        </div> --}}
     </div>
     <script>
         let validate = {
@@ -131,8 +157,7 @@
             validate.required('user');
             validate.email('email');
             validate.required('phone');
-            validate.required('dob');
-            // validate.required('gender');
+                        // validate.required('gender');
 
             if (validate.is_validate == false) {
                 const url = "{{ route('users.create-profile.post') }}";
@@ -143,6 +168,8 @@
                 })
                 // console.log(data);
                 objForm.post(url, data);
+            }else{
+                alert('validation_error');
             }
 
         })

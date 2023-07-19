@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndiaCity extends Migration
+class CreateUsersSocialUrl extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateIndiaCity extends Migration
      */
     public function up()
     {
-        Schema::create('india_city', function (Blueprint $table) {
+        Schema::create('users_social_url', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->tinyInteger('state_id', false, true);
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('social_url',100);
+            $table->string('social_name',100)->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateIndiaCity extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('india_city');
+        Schema::dropIfExists('users_social_url');
     }
 }

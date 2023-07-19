@@ -15,16 +15,16 @@ class CreateUsersWorkExperience extends Migration
     {
         Schema::create('users_work_experience', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_resume_id');
-            $table->foreign('users_resume_id')->references('id')->on('users_resume')->onDelete('cascade');
-            $table->enum('is_current_working',['yes','no'])->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->enum('is_working',['yes','no'])->nullable();
             $table->enum('work_type',['full','part'])->nullable();
             $table->string('company_name',100)->nullable();
             $table->string('desigination',100)->nullable();
             $table->string('job_city',100)->nullable();
             $table->date('joining_data')->nullable();
-            $table->date('quit_date')->nullable();
-            $table->json('job_skills')->nullable();
+            $table->date('last_date')->nullable();
+            $table->json('skills')->nullable();
             $table->text('profile_desc')->nullable();
             $table->timestamps();
         });

@@ -15,8 +15,8 @@ class CreateUsersJobLocations extends Migration
     {
         Schema::create('users_job_locations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_resume_id');
-            $table->foreign('users_resume_id')->references('id')->on('users_resume')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('india_city')->onDelete('cascade');
             $table->timestamps();
