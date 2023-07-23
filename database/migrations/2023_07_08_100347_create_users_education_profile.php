@@ -21,8 +21,8 @@ class CreateUsersEducationProfile extends Migration
             $table->foreign('education_standard_id')->references('id')->on('education_standard')->onDelete('cascade');
             $table->string('board_university',100)->nullable();
             $table->string('institute_name',100)->nullable();
-            $table->string('start_year',4)->nullable();
-            $table->string('passing_year',4)->nullable();
+            $table->string('start_year',10)->nullable();
+            $table->string('passing_year',10)->nullable();
             $table->string('marks_grade',4)->nullable();
             $table->string('total_marks',4)->nullable();
             $table->string('course',100)->nullable();

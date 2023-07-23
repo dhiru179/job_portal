@@ -81,6 +81,7 @@ Route::middleware(['auth'])->name('users.')->prefix('users')->group(function () 
 
 
     Route::get('/index', [FrontUser::class, 'index'])->name('index');
+    Route::get('/view-my-cv', [FrontUser::class, 'viewMyCv'])->name('my-cv');
     Route::post('/apply-job', [FrontUser::class, 'applyJob'])->name('apply-job');
     Route::get('/list-job-applied', [FrontUser::class, 'listApplyJob'])->name('list-apply-job');
     Route::get('/create-resume', [FrontUser::class, 'createResume'])->name('create-resume');

@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-     <link rel="stylesheet" href="{{asset('/bootstrap/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('/bootstrap/bootstrap.min.css')}}">
    
     <script src="{{asset('/bootstrap/jquery.min.js')}}"></script>
     <!-- Bootstrap CSS -->
@@ -54,7 +54,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('landing_page') }}">Job Portal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
