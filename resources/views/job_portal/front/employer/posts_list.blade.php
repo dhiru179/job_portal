@@ -14,16 +14,16 @@
                 </tr>
             </thead>
             <tbody >
-                @foreach ($result as $key => $item)
+                @foreach ($post as $key => $item)
                 <tr>
                     <th scope="row">{{$key+1}}</th>
                     <td>{{ $item->job_title }}</td>
                     <td>{{ $item->skill }}</td>
                     <td>
                         <div class="">
-                            <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                            <a href="#" class="btn btn-dark btn-sm">View</a>
-                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{{route('employers.job-post-edit',$item->id)}}" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="{{route('employers.job-post-view',$item->id)}}" class="btn btn-dark btn-sm">View</a>
+                            {{-- <a href="{{route('employers.job-post-edit',$item->id)}}" class="btn btn-danger btn-sm">Delete</a> --}}
                         </div>
                     </td>
                 </tr>

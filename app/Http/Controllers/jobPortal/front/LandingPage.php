@@ -16,15 +16,20 @@ class LandingPage extends Controller
             ->select(DB::raw('GROUP_CONCAT(job_skills.skill) as skill,job_post_id'))
             ->groupBy('job_skills.job_post_id');
 
+        $city_job_post = DB::table('emp_job_post_city')
+            ->join('cities', 'emp_job_post_city.location_id', 'cities.id')
+            ->select(DB::raw('GROUP_CONCAT(cities.name) as job_post_city,emp_job_post_city.job_post_id'))
+            ->groupBy('emp_job_post_city.job_post_id');
+
         $join_query = DB::table('emp_job_post')
-            ->select('emp_job_post.*', 'skills.skill', 'employers.company_name', 'user_apply_jobs.user_id', 'user_apply_jobs.job_status')
-            ->join('employers', 'emp_job_post.emp_id', 'employers.id')
+            ->join('user_profile','emp_job_post.user_id','user_profile.user_id')
             ->joinSub($skill, 'skills', function (JoinClause  $query) {
                 $query->on('emp_job_post.id', '=', 'skills.job_post_id');
             })
-            ->leftJoin('user_apply_jobs', 'emp_job_post.id', '=', 'user_apply_jobs.job_post_id');
-
-        $employers = DB::table('employers')->distinct()->limit(5)->get();
+            ->joinSub($city_job_post, 'post_city', function (JoinClause  $query) {
+                $query->on('emp_job_post.id', '=', 'post_city.job_post_id');
+            });
+        
         if ($request->keyword != "") {
             $join_query->orWhere('emp_job_post.job_title', 'like', '%' . $request->keyword . '%');
             $join_query->orWhere('skills.skill', 'like', '%' . $request->keyword . '%');
@@ -35,6 +40,7 @@ class LandingPage extends Controller
             $join_query->whereIn('emp_job_post.emp_id',$request->emp_id);
         }
         $result = $join_query->get();
-        return view('job_portal.front.landing', compact(['result', 'employers',]));
+       
+        return view('job_portal.front.landing', compact(['result']));
     }
 }

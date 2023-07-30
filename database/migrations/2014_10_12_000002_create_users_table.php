@@ -15,15 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('location_id');
-            $table->foreign('location_id')->references('id')->on('india_city')->onDelete('cascade');
-            $table->enum('country', ['india', ' foreign'])->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone', 15)->nullable();
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->enum('user_type',['seeker','employer']);
+            $table->enum('account_status',['active','deactive'])->default('deactive');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -10,11 +10,10 @@ use App\Http\Controllers\jobPortal\front\employer\auth\{
     EmployerAuth,
 };
 
-use App\Http\Controllers\jobPortal\front\user\auth\{
+use App\Http\Controllers\jobPortal\front\auth\{
 
     UsersAuth
 };
-
 
 
 /*
@@ -35,19 +34,21 @@ Route::name('admin.')->prefix('admin')->group(function () {
     Route::post('/login', [AdminAuth::class, 'login'])->name('login.post');
     Route::post('/logout', [AdminAuth::class, 'logout'])->name('logout')->middleware('auth:admin');
 });
-Route::name('employers.')->prefix('employers')->group(function () {
-    Route::get('/signup', [EmployerAuth::class, 'signUpPage'])->name('signup');
-    Route::post('/signup', [EmployerAuth::class, 'employerRegistration'])->name('signup.post');
-    Route::get('/login', [EmployerAuth::class, 'loginPage'])->name('login');
-    Route::post('/login', [EmployerAuth::class, 'login'])->name('login.post');
-    Route::post('/logout', [EmployerAuth::class, 'logout'])->name('logout')->middleware('auth:employer');
-});
+// Route::name('employers.')->prefix('employers')->group(function () {
+//     Route::get('/signup', [EmployerAuth::class, 'signUpPage'])->name('signup');
+//     Route::post('/signup', [EmployerAuth::class, 'employerRegistration'])->name('signup.post');
+//     Route::get('/login', [EmployerAuth::class, 'loginPage'])->name('login');
+//     Route::post('/login', [EmployerAuth::class, 'login'])->name('login.post');
+//     Route::post('/logout', [EmployerAuth::class, 'logout'])->name('logout')->middleware('auth:employer');
+// });
 
 Route::name('users.')->prefix('users')->group(function () {
     Route::get('/signup', [UsersAuth::class, 'signUpPage'])->name('signup');
     Route::post('/signup', [UsersAuth::class, 'userRegistration'])->name('signup.post');
     Route::get('/login', [UsersAuth::class, 'loginPage'])->name('login');
     Route::post('/login', [UsersAuth::class, 'login'])->name('login.post');
+    Route::get('/verify',[UsersAuth::class,'verfyUrl'])->name('verfy-url');
+    Route::post('/verify-email', [UsersAuth::class, 'toVerifyEmail'])->name('verfy-email');
     Route::post('/logout', [UsersAuth::class, 'logout'])->name('logout')->middleware('auth');
     
 });

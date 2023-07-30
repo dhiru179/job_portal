@@ -18,7 +18,7 @@ class CreateUsersJobLocations extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('location_id');
-            $table->foreign('location_id')->references('id')->on('india_city')->onDelete('cascade');
+            $table->foreign('location_id')->references('id')->on('cities')->onDelete('cascade');
             $table->timestamps();
         });
     }

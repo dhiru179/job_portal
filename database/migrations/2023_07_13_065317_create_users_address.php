@@ -19,9 +19,11 @@ class CreateUsersAddress extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('address_first');
             $table->string('address_second')->nullable();
-            $table->string('state', 100);
-            $table->string('city', 100);
+            $table->unsignedBigInteger('city_id');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->string('pincode', 8);
+            $table->enum('type',['general','resume'])->nullable();
+            $table->tinyInteger('order_by')->length(2)->nullable();
             $table->timestamps();
         });
     }

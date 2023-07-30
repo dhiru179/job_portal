@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserApplyJobs extends Migration
+class CreateEmpJobPostCity extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateUserApplyJobs extends Migration
      */
     public function up()
     {
-        Schema::create('user_apply_jobs', function (Blueprint $table) {
+        Schema::create('emp_job_post_city', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_post_id');
             $table->foreign('job_post_id')->references('id')->on('emp_job_post')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->enum('job_status',['Save','Applied']);
+            $table->unsignedBigInteger('location_id');
+            $table->foreign('location_id')->references('id')->on('cities')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateUserApplyJobs extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_apply_jobs');
+        Schema::dropIfExists('emp_job_post_city');
     }
 }

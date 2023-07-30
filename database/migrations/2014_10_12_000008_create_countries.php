@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBoardUniversity extends Migration
+class CreateCountries extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateBoardUniversity extends Migration
      */
     public function up()
     {
-        Schema::create('board_university', function (Blueprint $table) {
+        Schema::create('countries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->timestamps();
+            $table->string('sortname', 2);
+            $table->string('name', 50);
+            $table->string('phonecode', 5);
         });
     }
 
@@ -27,6 +28,6 @@ class CreateBoardUniversity extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('board_university');
+        Schema::dropIfExists('countries');
     }
 }

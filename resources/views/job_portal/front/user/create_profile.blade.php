@@ -3,61 +3,146 @@
 {{-- @section('dash', 'active') --}}
 @section('layout')
     <div class="container">
-        <form class="mt-5 col-6 offset-3" action="" id="form">
-            <h3 class="text-center">Create Profile</h3>
-            <div class="mb-3">
-                <label for="">User Name</label>
-                <input type="text" name="user" id="user" value="{{ $user->name }}" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="">Email</label>
-                <input type="text" id="email" value="{{ $user->email }}" class="form-control" disabled>
-            </div>
-            <div class="mb-3">
-                <label for="">phone</label>
-                <input type="text" name="phone" id="phone" value="{{ $user->phone }}" class="form-control">
-            </div>
-            <div class="mb-3">
+        <form class="mt-5 col-6 offset-3 row" action="" id="form">
 
-
-                <label class="me-3" for="">Gender</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="male"
-                        @php echo $user->gender=="male"?"checked":"" @endphp>
-                    <label class="form-check-label" for="inlineRadio1">Male</label>
+            @if ($type == 'employer')
+            <h5 class="text-center">Company profile</h5>
+                <div class="mb-3 col-4">
+                    <input type="text" name="f_name" id="f_name" value="{{ !empty($user->f_name) ? $user->f_name : '' }}"
+                        class="form-control" placeholder="first name">
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio2"
-                        value="female"@php echo $user->gender=="female"?"checked":"" @endphp>
-                    <label class="form-check-label" for="inlineRadio2">Female</label>
+                <div class="mb-3 col-4">
+
+                    <input type="text" name="m_name" id="m_name"
+                        value="{{ !empty($user->m_name) ? $user->m_name : '' }}" class="form-control"
+                        placeholder="middle name">
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio3"
-                        value="others"@php echo $user->gender=="others"?"checked":"" @endphp>
-                    <label class="form-check-label" for="inlineRadio3">Others</label>
+                <div class="mb-3 col-4">
+
+                    <input type="text" name="l_name" id="l_name"
+                        value="{{ !empty($user->l_name) ? $user->l_name : '' }}" class="form-control"
+                        placeholder="last name">
+                </div>
+                <div class="mb-3">
+
+                    <input type="text" id="email" value="{{ !empty($user->email) ? $user->email : '' }}"
+                        class="form-control" placeholder="Email" disabled>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="phone_1" id="phone_1"
+                        value="{{ !empty($user->primary_phone) ? $user->primary_phone : $user->phone }}"
+                        class="form-control" placeholder="primary mobile">
+                </div>
+                <div class="mb-3">
+
+                    <input type="text" name="phone_2" id="phone_2"
+                        value="{{ !empty($user->secondary_phone) ? $user->secondary_phone : '' }}" class="form-control"
+                        placeholder="alternative mobile">
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="company_name"  value="{{ !empty($user->company_name) ? $user->company_name : '' }}" class="form-control" placeholder="Company Name">
+                </div>
+                <div class="mb-3">
+                    <input type="email"  name="office_email" value="{{ !empty($user->office_email) ? $user->office_email : '' }}" class="form-control" placeholder="Office Email">
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="website" value="{{ !empty($user->website) ? $user->website : '' }}" class="form-control" placeholder="Enter Website">
+                </div>
+                <div class="mb-3">
+                    <label for="">Profile pic</label>
+                    <input type="file" name="profile_pic" id="profile_pic" class="form-control"
+                        placeholder="profile pic">
+                    @if (!empty($user->profile_pic))
+                        <a href="{{ asset('storage/pic/' . $user->profile_pic) }}">View Image</a>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label for="">Company Logo</label>
+                    <input type="file" name="logo" id="logo" class="form-control" placeholder="Company Logo">
+                    @if (!empty($user->logo))
+                        <a href="{{ asset('storage/pic/' . $user->logo) }}">View Logo</a>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <textarea name="about_self" class="form-control" placeholder="Write..." id="" cols="3" rows="3">{{ !empty($user->about_self) ? $user->about_self : '' }}</textarea>
+                </div>
+            @else
+                <h3 class="text-center">Create Profile</h3>
+                <div class="mb-3 col-4">
+                    <input type="text" name="f_name" id="f_name"
+                        value="{{ !empty($user->f_name) ? $user->f_name : '' }}" class="form-control"
+                        placeholder="first name">
+                </div>
+                <div class="mb-3 col-4">
+
+                    <input type="text" name="m_name" id="m_name"
+                        value="{{ !empty($user->m_name) ? $user->m_name : '' }}" class="form-control"
+                        placeholder="middle name">
+                </div>
+                <div class="mb-3 col-4">
+
+                    <input type="text" name="l_name" id="l_name"
+                        value="{{ !empty($user->l_name) ? $user->l_name : '' }}" class="form-control"
+                        placeholder="last name">
+                </div>
+                <div class="mb-3">
+
+                    <input type="text" id="email" value="{{ !empty($user->email) ? $user->email : '' }}"
+                        class="form-control" placeholder="Email" disabled>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="phone_1" id="phone_1"
+                        value="{{ !empty($user->primary_phone) ? $user->primary_phone : $user->phone }}"
+                        class="form-control" placeholder="primary mobile">
+                </div>
+                <div class="mb-3">
+
+                    <input type="text" name="phone_2" id="phone_2"
+                        value="{{ !empty($user->secondary_phone) ? $user->secondary_phone : '' }}" class="form-control"
+                        placeholder="alternative mobile">
+                </div>
+                <div class="mb-3">
+                    <label class="me-3" for="">Gender</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="male"
+                            {{ !empty($user->gender) && $user->gender == 'male' ? 'checked' : 'checked' }}>
+                        <label class="form-check-label" for="inlineRadio1">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="female"
+                            {{ !empty($user->gender) && $user->gender == 'female' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="inlineRadio2">Female</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" id="inlineRadio3" value="others"
+                            {{ !empty($user->gender) && $user->gender == 'others' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="inlineRadio3">Others</label>
+                    </div>
+
                 </div>
 
-            </div>
-          
-            <div class="mb-3">
-                <label for="">city</label>
-                <select class="form-select" name="city" id="city">
-                    <option value="">select city</option>
-                    @foreach ($city as $item)
-                        @if($user->location_id==$item->id)
-                        <option selected value="{{ $item->id }}">{{ $item->name }}</option>
-                        @else
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <div class="mb-3">
 
-            </div>
-        
-            <div class="mb-3">
-                <input type="file" name="img" id="img" class="form-control">
-            </div>
+                    <input type="text" name="dob" id="dob" class="form-control"
+                        value="{{ !empty($user->date_of_birth) ? $user->date_of_birth : '' }}"
+                        placeholder="Date Of Birth*">
+                </div>
 
+                <div class="mb-3">
+                    <label for="">Profile pic</label>
+                    <input type="file" name="profile_pic" id="profile_pic" class="form-control"
+                        placeholder="profile pic">
+                    @if (!empty($user->profile_pic))
+                        <a href="{{ asset('storage/pic/' . $user->profile_pic) }}">View Image</a>
+                    @endif
+                </div>
+
+                <div class="mb-3">
+                    <textarea name="about_self" class="form-control" placeholder="Write..." id="" cols="3"
+                        rows="3">{{ !empty($user->about_self) ? $user->about_self : '' }}</textarea>
+                </div>
+
+            @endif
             <div class="mb-3">
                 <input type="button" class="btn btn-success" id="submit" value="submit">
             </div>
@@ -83,39 +168,6 @@
         </div> --}}
     </div>
     <script>
-        let validate = {
-            required: function(e) {
-                typeof e == 'string' ? id = e : id = e.target.id;
-                let inputField = $('#' + id);
-                $('#' + id).next().remove();
-
-                if ($.trim(inputField.val()) == '') {
-                    $('#' + id).after(`<span class="text-danger">This field is required</span>`)
-                    validate.is_validate = true;
-                }
-                return validate.is_validate;
-            },
-            email: function(e) {
-                typeof e == 'string' ? id = e : id = e.target.id;
-                let emailPattern = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-                let inputField = $('#' + id);
-                $('#' + id).next().remove();
-
-                if ($.trim(inputField.val()) == '') {
-                    validate.required(id);
-
-                } else {
-                    if (!emailPattern.test(inputField.val())) {
-                        validate.is_validate = true;
-                        $('#' + id).after(`<span class="text-danger">Enter Valid Email address</span>`)
-                    } else {
-                        validate.is_validate = false;
-                        // $('#admin_email_msg').html('');
-                    }
-                }
-            }
-
-        };
         let objForm = {
 
             post: (url, data) => {
@@ -126,6 +178,8 @@
                     },
                     url: url,
                     data: data,
+                    contentType: false,
+                    processData: false,
                     success: function(res) {
                         console.log(res);
 
@@ -145,30 +199,84 @@
                 });
             },
             errorReturn: (data) => {
+                $('.custom_error').remove();
                 for (const [key, value] of Object.entries(data)) {
                     // console.log(`${key}: ${value}`);
-                    $('#' + key).after(`<span class="text-danger">${value[0]}</span>`);
+                    $(`[name=${key}]`).after(`<span class="text-danger custom_error">${value[0]}</span>`);
                 }
             }
         }
+        var autoLoad = (function() {
+            $('#dob').click(function() {
+                this.setAttribute('type', 'date');
+                // min="1980-01-01" max="2000-01-01"
+                let dateObj = new Date();
+                let month = dateObj.getMonth(); //months from 1-12
+                let day = dateObj.getDate();
+                dateObj.setFullYear(dateObj.getFullYear() - 16);
+                let year = dateObj.getFullYear();
+                this.setAttribute('max', `${year}-${month<10?'0'+month:month}-${day}`)
+            })
+
+
+            $('#phone_1').keyup(() => validate.mobile("phone_1"));
+            $('#phone_2').keyup(() => validate.mobile("phone_2"));
+
+        }());
+
+        function validation() {
+            validate.is_validate = false;
+            validate.required('f_name');
+            validate.mobile('phone_1');
+            validate.mobile('phone_2');
+            $('input[type="file"]').each(function() {
+                var ext = this.value.substring(this.value.lastIndexOf('.') + 1);
+                let name = $(this).attr('name');
+                let supportFile = [];
+                if (name == "users_resume") {
+                    supportFile = ['pdf', 'doc'];
+                }
+                if (name == "profile_pic") {
+                    supportFile = ['jpeg', 'png'];
+                }
+
+                validate.file({
+                    "name": ext,
+                    "supportFile": supportFile,
+                    "id": this.id,
+                });
+            })
+            return validate.is_validate;
+        }
 
         $('#submit').click((e) => {
-            validate.is_validate = false;
-            validate.required('user');
-            validate.email('email');
-            validate.required('phone');
-                        // validate.required('gender');
 
-            if (validate.is_validate == false) {
+            // validate.required('gender');
+
+            if (!validation()) {
                 const url = "{{ route('users.create-profile.post') }}";
-                let data = $('#form').serializeArray();
-                data.push({
+                let form_data = $('#form').serializeArray();
+
+                form_data.push({
                     name: "slug",
                     value: "user_signup"
+                },{
+                    name: "type",
+                    value: "{{$type}}"
                 })
+
+                let data = new FormData();
+                $.each(form_data, function(key, input) {
+                    data.append(input.name, input.value);
+                });
+                $('input[type="file"]').each(function() {
+                    // console.log(this)
+                    data.append(this.name, this.files[0])
+                })
+
                 // console.log(data);
                 objForm.post(url, data);
-            }else{
+            } else {
                 alert('validation_error');
             }
 

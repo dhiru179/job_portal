@@ -5,17 +5,18 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{asset('/bootstrap/bootstrap.min.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('/bootstrap/bootstrap.min.css')}}">
    
-    <script src="{{asset('/bootstrap/jquery.min.js')}}"></script>
+    <script src="{{asset('/bootstrap/jquery.min.js')}}"></script> --}}
     <!-- Bootstrap CSS -->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> --}}
-        {{-- <link rel="stylesheet" href="{{asset('multi_select/sellect.css')}}">
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    {{-- <link rel="stylesheet" href="{{asset('multi_select/sellect.css')}}">
        <script src="{{asset('multi_select/sellect.js')}}"></script> --}}
+       <script  src="{{asset('asset/js/validation.js')}}"></script> 
     <title>@yield('title')</title>
     <style>
         .radio-toolbar {
@@ -70,11 +71,9 @@
                         </li>
                     @endauth
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">About</a>
+                        <a class="nav-link active" href="{{route('users.job-posts')}}">Job Post</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Services</a>
-                    </li>
+                
 
                 </ul>
 
@@ -93,6 +92,10 @@
                                 <li>
                                     <hr>
                                 </li>
+
+                                <li><a class="dropdown-item" href="{{ route('users.my-cv') }}">My Resume</a>
+                                </li>
+
                                 <li><a class="dropdown-item" href="{{ route('users.upload-resume') }}">Upload Resume</a>
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('users.list-apply-job') }}">Applied Job</a></li>
@@ -106,31 +109,25 @@
                         </form>
                     </div>
                 @endauth
-                @guest
-                    <div class="dropdown" style="margin-right:71px ">
-                        <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            sign
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('users.login') }}">User Login</a></li>
-                            <li><a class="dropdown-item" href="{{ route('users.signup') }}">User signUp</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('employers.login') }}">Employer Login</a></li>
-                            <li><a class="dropdown-item" href="{{ route('employers.signup') }}">Employer signUp</a></li>
-                        </ul>
-                    </div>
-                @endguest
 
+                @guest
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('users.login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('users.signup') }}">signUp</a>
+                        </li>
+                    </ul>
+
+                @endguest
 
 
             </div>
         </div>
     </nav>
     @if (session()->has('message'))
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Message</strong> {{ session()->get('message') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -138,10 +135,10 @@
     @section('layout')
 
     @show
-    <script src="{{asset('/bootstrap/bootstrap.bundle.min.js')}}"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    {{-- <script src="{{asset('/bootstrap/bootstrap.bundle.min.js')}}"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script> --}}
+    </script>
 
 </body>
 

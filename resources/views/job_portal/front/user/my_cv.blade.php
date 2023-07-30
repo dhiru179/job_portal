@@ -15,20 +15,26 @@
                         <span>{{ !empty($user->city) ? $user->city : '' }}</span>
                     </div>
                     <div>
-                        <span>{{ auth()->user()->email }}</span>
+                        <span>{{ !empty($user->resume_email) ? $user->resume_email : '' }}</span>
                     </div>
                     <div>
-                        <span>{{ !empty($user->phone_1) ? $user->phone_1 : '' }}</span>
+                        <span>{{ !empty($user->resume_phone_1) ? $user->resume_phone_1 : '' }}</span>
                     </div>
                     <div>
                         <span>website</span>
                     </div>
                 </div>
                 <div class="col-4 d-flex flex-column justify-content-center align-items-center">
-                    <div class="bg-light" style="width: 150px;height:50px">
+                    <div class="bg-light">
+                        @if (!empty($user->resume_pic))
+                            <img src="{{ asset('storage/pic/' . $user->resume_pic) }}" alt=""
+                                style="width:135px;height:118px">
+                        @endif
 
                     </div>
-                    <a class="btn btn-sm btn-info" href="">upload img</a>
+                    <div>
+                        <input type="button" key="Upload Image" class="btn btn-sm btn-info addt" value="upload img">
+                    </div>
                 </div>
             </div>
             <div class="mb-3">
@@ -151,42 +157,7 @@
         let job_location = [];
         let skill = [];
         let job_skill = [];
-        let validate = {
-            required: function(e) {
-                typeof e == 'string' ? id = e : id = e.target.id;
-                let inputField = $('#' + id);
-                // $('#'+id).next().find('span').remove();
-                $('#' + id).parent().find('span.custom_error').remove();
 
-                if ($.trim(inputField.val()) == '') {
-
-                    $('#' + id).after(`<span class="text-danger custom_error">This field is required</span>`)
-                    validate.is_validate = true;
-                }
-                return validate.is_validate;
-            },
-            email: function(e) {
-                typeof e == 'string' ? id = e : id = e.target.id;
-                let emailPattern = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-                let inputField = $('#' + id);
-                // $('#'+id).next().find('span').remove();
-                $('#' + id).parent().find('span.custom_error').remove();
-
-                if ($.trim(inputField.val()) == '') {
-                    validate.required(id);
-
-                } else {
-                    if (!emailPattern.test(inputField.val())) {
-                        validate.is_validate = true;
-                        $('#' + id).after(`<span class="text-danger custom_error">Enter Valid Email address</span>`)
-                    } else {
-                        validate.is_validate = false;
-                        // $('#admin_email_msg').html('');
-                    }
-                }
-            }
-
-        };
         let objForm = {
             formModal: (data, title) => {
                 let modal = `<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -425,7 +396,7 @@
                                     <option value="">--</option>
                                     ${option}
                                  </select>   
-                                <div class="append-job-skills" id="append-job_skills${count}">
+                                <div class="append-job-skills" id="append-job-skills${count}">
                                     ${job_skill}
                                 </div>
                             </div>
@@ -461,14 +432,17 @@
                         console.log(res);
 
                         if (res.status) {
-                            if (res.error != "") {
-                                objForm.returnError(res.error);
-                                return false;
-                            } else if (res.msg != "  ") {
-                                alert(res.msg);
-                                location.reload();
-
+                            if (res.slug == "state-list") {
+                                objForm.showStates(res.data, obj.step);
+                                return;
                             }
+                            if (res.slug == "city-list") {
+                                objForm.showCity(res.data, obj.step);
+                                return;
+                            }
+
+                            alert(res.msg);
+
                         }
                     },
                     error: (err) => console.log(err),
@@ -489,6 +463,7 @@
             saveModalForm: (key) => {
                 $('#save_modal').click(function() {
                     let form_data = $('#form-modal').serializeArray();
+                    let data = new FormData();
                     if (key == "Skills") {
                         $('#append-skills').find('input[type="button"]').each(function() {
                             form_data.push({
@@ -515,7 +490,28 @@
                             })
                         })
                     }
-                    let data = new FormData();
+                    if (key == "Upload Image") {
+                        $('input[type="file"]').each(function() {
+                            var ext = this.value.substring(this.value.lastIndexOf('.') + 1);
+                            let name = $(this).attr('name');
+                            let supportFile = [];
+                            if (name == "users_resume") {
+                                supportFile = ['pdf', 'doc'];
+                            }
+                            if (name == "profile_pic") {
+                                supportFile = ['jpeg', 'png'];
+                            }
+                            console.log(ext, supportFile)
+                            // return;
+                            validate.file({
+                                "name": ext,
+                                "supportFile": supportFile
+                            });
+                            data.append(this.name, this.files[0])
+                        })
+
+                    }
+
                     $.each(form_data, function(i, input) {
                         data.append(input.name, input.value);
                     });
@@ -542,28 +538,58 @@
 
                     }
                 })
-                const addSkills = $('#add-skills').keyup(function() {
-                    // && /[a-z]/i.test(event.key)
-                    validate.is_validate = false;
-                    validate.required('add-skills'); //blank not except so validate required
-                    if (validate.is_validate == false) {
-
-                        if (event.keyCode == 188 || event.keyCode == 32 || event.keyCode == 13) {
-                            skill.push(this.value.trim())
-
-                            let html =
-                                `<input type="button" onclick="removeSkills(this,'user_skills')" class="btn btn-outline-dark me-1 my-1 btn-sm" value="${this.value.trim()}">`;
-                            $('#append-skills').append(html);
-
-                            this.value = "";
+            },
+            selectCountry: () => {
+                $('.country').each(function() {
+                    $(this).change(function() {
+                        if (this.value == "") return;
+                        let data = new FormData();
+                        data.append("country_id", this.value);
+                        data.append("slug", "state-list");
+                        const obj = {
+                            url: "{{ route('states') }}",
+                            data: data,
+                            step: 2
                         }
-                    }
+                        objForm.post(obj);
 
+                    })
                 })
+            },
+            selectState: () => {
+                $('.state').each(function() {
 
+                    $(this).change(function() {
 
-            }
-
+                        if (this.value == "") return;
+                        let data = new FormData();
+                        data.append("state_id", this.value);
+                        data.append("slug", "city-list");
+                        const obj = {
+                            url: "{{ route('cities') }}",
+                            data: data,
+                            step: 2
+                        }
+                        objForm.post(obj);
+                    })
+                })
+            },
+            showStates: (data, current_item) => {
+                let option = "";
+                $(`.state[step=${current_item}]`).html('');
+                data.forEach(elem => {
+                    option += `<option value="${elem.id}">${elem.name}</option>`;
+                })
+                $(`.state[step=${current_item}]`).append(option);
+            },
+            showCity: (data, current_item) => {
+                let option = "";
+                $(`.city[step=${current_item}]`).html('');
+                data.forEach(elem => {
+                    option += `<option value="${elem.id}">${elem.name}</option>`;
+                })
+                $(`.city[step=${current_item}]`).append(option);
+            },
 
         }
         var autoLoad = (function() {
@@ -582,7 +608,7 @@
                 })
             }
 
-            $('.append-job_skills[key]').each(function() {
+            $('.append-job-skills[key]').each(function() {
                 let i = parseInt($(this).attr('key'));
                 if (!job_skill[i]) {
                     job_skill[i] = [];
@@ -639,9 +665,10 @@
                 validate.required('company_name' + count);
                 validate.required('desigination' + count);
                 validate.required('job_city' + count);
-                if ($('#append-job_skills' + count).find('input').length == 0) {
+                if ($('#append-job-skills' + count).find('input').length == 0) {
                     $('#add-job-skills' + count).parent().find('span.custom_error').remove();
-                    $('#add-job-skills' + count).after(`<span class="text-danger custom_error">Select job skills</span>`)
+                    $('#add-job-skills' + count).after(
+                        `<span class="text-danger custom_error">Select job skills</span>`)
                     validate.is_validate = true;
                 }
                 console.log(validate.is_validate)
@@ -691,33 +718,69 @@
         }
 
         function removeLocation(btn, option_value) {
-            let select = $($(btn).parent()).parent().find('select')[0];
-            // console.log(job_location.length,"d",job_location,option_value)
-            if (job_location.length > 0) {
-                const index = job_location.indexOf(option_value);
-                if (index > -1) { // only splice array when item is found
-                    job_location.splice(index, 1); // 2nd parameter means remove one item only
-                }
-                // console.log(job_location.length,index,job_location)
-            }
-            $(select).find(`option[value=${option_value}]`).removeAttr('disabled');
+
             $(btn).remove();
         }
 
-        function addLocation(e, elem) {
+        function addLocation(elem) {
             $('#append-location').parent().find('span.custom_error').remove();
-            let count = $(elem).find('option[disabled]').length;
-            if (count > 7) {
-                return
+            let append_loc = $('#append-location').find('input[type="button"]');
+            let valid = true;
+           
+            if (append_loc.length > 7) {
+                $('#append-location').after(
+                    `<span class="text-danger custom_error">Maximum 8 location allowed</span>`
+                );
+                valid = false;
+            } else {
+                append_loc.each(function() {
+                    if (elem.value == $(this).attr('data-id')) {
+                        valid = false;
+                        $('#append-location').after(
+                            `<span class="text-danger custom_error">Duplicate entry not allowed</span>`
+                        );
+                    }
+                })
             }
-            let text = $(elem).find(`[value=${$(elem).val()}]`).text()
-            console.log(elem.value, text)
-            job_location.push(parseInt(elem.value));
-            let html =
-                `<input type="button" data-id="${elem.value}" onclick="removeLocation(this,${elem.value})" class="btn btn-outline-dark me-1 my-1 btn-sm " value="${text}">`;
-            $('#append-location').append(html);
-            // e.target.value = "";
-            $(elem).find(`[value=${$(elem).val()}]`).attr('disabled', true);
+            if (valid) {
+                let text = $(elem).find(`option[value=${$(elem).val()}]`).text()
+                let html =
+                    `<input type="button" data-id="${elem.value}" onclick="removeLocation(this,${elem.value})" class="btn btn-outline-dark me-1 my-1 btn-sm " value="${text}">`;
+                $('#append-location').append(html);
+            }
+            return;
+        }
+
+        function addSkills(e) {
+            $('#append-skills').parent().find('span.custom_error').remove();
+            let valid = true;
+            let value = e.target.value.trim();
+            $('#append-skills').find('input[type="button"]').each(function() {
+                if (e.target.value == this.value) {
+
+                    return valid = false;
+                }
+                // $('#' + id).parent().find('span.custom_error').remove();
+            })
+
+            if (value.length > 0 && valid) {
+
+                if (e.keyCode == 188 || e.keyCode == 32 || e.keyCode == 13) {
+                    skill.push(value)
+
+                    let html =
+                        `<input type="button" onclick="removeSkills(this,'user_skills')" class="btn btn-outline-dark me-1 my-1 btn-sm" value="${value}">`;
+                    $('#append-skills').append(html);
+
+                    $('.ad-job-skills').append(`<option value=${value}>${value}</option>`)
+
+                    e.target.value = "";
+                }
+            } else {
+                $('#add-skills').after(
+                    `<span class="text-danger custom_error">Null or Duplicate entry</span>`
+                );
+            }
 
         }
 
@@ -733,7 +796,8 @@
                 }
                 $(elem).remove();
             } else if (slug == "job_skills") {
-                $($(elem).parent().parent().find('select')).find(`option[value=${elem.value}]`).removeAttr('disabled');
+                $($(elem).parent().parent().find('select')).find(`option[value=${elem.value}]`).removeAttr(
+                    'disabled');
                 $(elem).remove();
                 if (job_skill[count].length > 0) {
                     const index = job_skill[count].indexOf(elem.value);
@@ -745,24 +809,28 @@
             }
         }
 
-
-
-
         function addJobSkills(elem, count) {
+
             $('#add-job-skills' + count).parent().find('span.custom_error').remove();
-            $(elem).find(`option[value=${elem.value}]`).attr('disabled', 'true');
-            if (!job_skill[count]) {
-                job_skill[count] = [];
+            let valid = true;
+            $(elem).parent().find('.append-job-skills').find('input[type="button"]').each(function() {
+                if (elem.value == this.value) {
+                    return valid = false;
+                }
+
+            })
+            // $(elem).find(`option[value=${elem.value}]`).attr('disabled', 'true');
+            if (valid) {
+                let html =
+                    `<input type="button" onclick="removeSkills(this,'job_skills',${count})" class="btn btn-outline-dark me-1 my-1 btn-sm"  value="${elem.value}">`;
+
+                $(elem).parent().find('.append-job-skills').append(html);
+            } else {
+                $(elem).parent().find('.append-job-skills').after(
+                    `<span class="text-danger custom_error">Duplicate entry not allowed</span>`
+                );
             }
-            console.log(count);
-            job_skill[count].push(elem.value);
-            let html =
-                `<input type="button" onclick="removeSkills(this,'job_skills',${count})" class="btn btn-outline-dark me-1 my-1 btn-sm"  value="${elem.value}">`;
-
-            $('#append-job_skills' + count).append(html);
-
         }
-
 
         function addWorkExperence(elem) {
 
@@ -838,7 +906,7 @@
                 innerHtml = `<div class="mb-3">
                     <input type="hidden" name="slug" value="work_experience">
                     <input type="hidden" name="resume_slug" value="user_skill">
-                        <input type="text" class="form-control"  id="add-skills"
+                        <input type="text" class="form-control" onkeyup="addSkills(event)"  id="add-skills"
                             placeholder="Skills">
                             
                         <div id="append-skills">
@@ -870,53 +938,92 @@
                 innerHtml = `<div class="mb-3">
                     <input type="hidden" name="slug" value="work_experience">
                     <input type="hidden" name="resume_slug" value="job_location">
-                    <select class="form-select" onchange="addLocation(event,this)" id="">
-                            @php
-                                $count = count($job_loc);
-                                for ($i = 0; $i < count($city); $i++) {
-                                    $id = $city[$i]->id;
-                                    $name = $city[$i]->name;
-                                    if (count($job_loc) > 0) {
-                                        for ($j = 0; $j < count($job_loc); $j++) {
-                                            if ($id == $job_loc[$j]->location_id) {
-                                                echo "<option disabled value='$id'>$name</option>";
-                                            }
-                                        }
-                                    }
-                                    echo "<option value='$id'>$name</option>";
-                                }
-                            @endphp
-                        </select>
-                            
+                    <div class="mb-3 ">
+                        <label for="">Add Job Location</label>
+                        <div class="row">
+                            <div class="mb-3">
+                                <select class="form-select country" step="2" name="">
+                                    <option class="text-muted" value="">select country</option>
+                                    @foreach ($countries as $country)
+                                        @if (!empty($user->country_id) && $country->id == $user->country_id)
+                                            <option selected value="{{ $country->id }}">{{ $country->name }}</option>
+                                        @endif
+                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <select name="" step="2" class="form-select state">
+                                    @if (!empty($user->state_id))
+                                        @foreach ($states as $state)
+                                            @if ($state->id == $user->state_id)
+                                                <option selected value="{{ $state->id }}">{{ $state->name }}</option>
+                                            @endif
+                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option class="text-muted" value="">select states</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select city" step="2" onchange="addLocation(this)" id="add_location">
+                                    @if (count($job_loc) > 0)
+                                          @foreach ($cities as $key => $city) 
+                                          <option  value='{{ $city->id }}'>{{ $city->name }}</option>"
+                                          @endforeach
+                                   @endif
+                                </select>
+                            </div>
+                        </div>
                         <div id="append-location">
+
                             @if (count($job_loc) > 0)
-                                @foreach ($job_loc as $item)
-                                    <input type="button" data-id="{{ $item->location_id }}"
-                                        onclick="removeLocation(this,{{ $item->location_id }})"
-                                        class="btn btn-success me-1 my-1 btn-sm " value="{{ $item->name }}">
+                                @foreach ($job_loc as $city)
+                                    <input type="button" data-id="{{ $city->id }}"
+                                        onclick="removeLocation(this,{{ $city->id }})"
+                                        class="btn btn-success me-1 my-1 btn-sm " value="{{ $city->name }}">
                                 @endforeach
                             @endif
                         </div>
+                    </div>
                     </div>`;
+            } else if (key == "Upload Image") {
+                innerHtml = `<input type="hidden" name="slug" value="work_experience">
+                            <input type="hidden" name="resume_slug" value="user_files">
+                            <input type="hidden" name="basic_info_id"
+                        value="{{ !empty($user->basic_info_id) ? $user->basic_info_id : '' }}">
+                            <input type="file" name="profile_pic" class="form-control">
+                            `;
             }
 
 
             $('#myModal').append(objForm.formModal(innerHtml, key));
             $('#myModal').modal('show')
             obj.key = key;
+            objForm.selectCountry();
+            objForm.selectState();
             objForm.addMoreInModal(obj); //add box in modal
             objForm.saveModalForm(key);
 
         })
 
+
+
+
+
+
         $('#print').click(() => {
-            var divToPrint = document.getElementById('my-cv');
+            $('#my-cv').find('.btn').remove();
+            var cv = $('#my-cv');
+
+
 
             var newWin = window.open('', 'Print-Window');
 
             newWin.document.open();
 
-            newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+            newWin.document.write('<html><body onload="window.print()">' + cv.html() + '</body></html>');
 
             newWin.document.close();
 
